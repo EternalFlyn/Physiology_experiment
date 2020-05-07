@@ -26,13 +26,6 @@ $(document).ready(function() {
 		if(num == 4) num = 0;
 		else num++;
 	});
-	$(".reset").mousedown(function() {
-		$(this).css("box-shadow", "0 0 5px #E12");
-		console.log("a");
-	});
-	$(".reset").mouseup(function() {
-		$(this).css("box-shadow", "");
-	});
 });
 
 function createNewRow() {
