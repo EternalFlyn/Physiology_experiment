@@ -1,3 +1,27 @@
 body {
 	margin: 0;
 }
+
+.row div{
+	border: black solid 1px;
+	text-align: center;
+}
+
+#title {
+	margin-top: 50px;
+	font-size: 20px;
+}
+
+.reset {
+	-webkit-user-select: none;
+	text-align: center;
+	background-color: #E12;
+	border: #E12 solid 2px;
+	border-radius: 10px;
+}
+
+.reset:hover {
+	background-color: #C12;
+	border: #C12 solid 2px;
+	border-radius: 10px;
+}

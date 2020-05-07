@@ -1,7 +1,8 @@
 #target {
-	width: 95vh;
-	height: 95vh;
-	position: absolute;
+	width: 95vmin;
+	height: 95vmin;
+	position: relative;
+	top: 10px;
 	left: 50%;
 	transform: translate(-50%, 0);
 	border: black solid 5px;
@@ -11,7 +12,7 @@
 .dart {
 	-webkit-user-select: none;
 	margin: 0;
-	font-size: 20px;
+	font-size: 40px;
 }
 
 #n0 {
