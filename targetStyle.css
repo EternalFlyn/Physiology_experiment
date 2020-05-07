@@ -1,0 +1,120 @@
+#target {
+	width: 95vh;
+	height: 95vh;
+	position: absolute;
+	left: 50%;
+	transform: translate(-50%, 0);
+	border: black solid 5px;
+	background-color: green;
+}
+
+.dart {
+	-webkit-user-select: none;
+	margin: 0;
+	font-size: 20px;
+}
+
+#n0 {
+	color: pink;
+}
+
+#n1 {
+	color: orange;
+}
+
+#n2 {
+	color: blue;
+}
+
+#n3 {
+	color: cyan;
+}
+
+#n4 {
+	color: purple;
+}
+
+.circle {
+	position: absolute;
+	border-radius: 999em;
+}
+
+#s1 {
+	width: 90%;
+	height: 90%;
+	top: 5%;
+	left: 5%;
+	background-color: black;
+}
+
+#s2 {
+	width: 80%;
+	height: 80%;
+	top: 10%;
+	left: 10%;
+	background-color: yellow;
+}
+
+#s3 {
+	width: 70%;
+	height: 70%;
+	top: 15%;
+	left: 15%;
+	background-color: black;
+}
+
+#s4 {
+	width: 60%;
+	height: 60%;
+	top: 20%;
+	left: 20%;
+	background-color: yellow;
+}
+
+#s5 {
+	width: 50%;
+	height: 50%;
+	top: 25%;
+	left: 25%;
+	background-color: black;
+}
+
+#s6 {
+	width: 40%;
+	height: 40%;
+	top: 30%;
+	left: 30%;
+	background-color: yellow;
+}
+
+#s7 {
+	width: 30%;
+	height: 30%;
+	top: 35%;
+	left: 35%;
+	background-color: black;
+}
+
+#s8 {
+	width: 20%;
+	height: 20%;
+	top: 40%;
+	left: 40%;
+	background-color: yellow;
+}
+
+#s9 {
+	width: 10%;
+	height: 10%;
+	top: 45%;
+	left: 45%;
+	background-color: black;
+}
+
+#bullseye {
+	width: 3%;
+	height: 3%;
+	top: 48.5%;
+	left: 48.5%;
+	background-color: red;
+}
