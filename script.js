@@ -1,81 +1,120 @@
-let darts = [], num = 0, ss = [0.45, 0.4, 0.35, 0.3, 0.25, 0.2, 0.15, 0.1, 0.05, 0.015];
+let day = 0, num = 0, isReset = false, tempNum = 0;
+let darts = [], dis = [];
+let colors = ["pink", "orange", "blue", "cyan", "purple"], ss = [0.45, 0.4, 0.35, 0.3, 0.25, 0.2, 0.15, 0.1, 0.05, 0.015];
+let dayLebel = ["2020/04/20", "2020/04/21", "2020/04/22", "2020/04/24", "2020/04/27", "2020/04/28", "2020/04/29", "2020/05/01", "2020/05/04", "2020/05/05", "2020/05/06", "2020/05/08", "2020/05/11", "2020/05/12", "2020/05/13"];
 
 $(document).ready(function() {
+	darts = Array(375);
 	$("#target").click(function(event) {
-		let w = $(this).innerWidth(), h = $(this).innerHeight();
-		let x = event.pageX - $(this).position().left, y = event.pageY - $(this).position().top;
-		let px = (x - 0.5 * w) / h, py = (y - 0.5 * h) / h;
-		let dart = null;
-		if(darts[num] == null || darts[num].dart == null) {
-			dart = document.createElement("div");
-			$("#target").append(dart);
+		if(num < 25) {
+			let w = $(this).width(), h = $(this).height();
+			let x = event.pageX - $(this).position().left, y = event.pageY - $(this).position().top;
+			let px = (x - 0.5 * w) / w, py = (y - 0.5 * h) / h;
+			let r = Math.pow(px * px + py * py, 0.5);
+			if(r > 0.45) {
+				px *= 0.5 / r;
+				py *= 0.5 / r;
+			}
+
+			let dart = document.createElement("div");
+			let dartId = day * 25 + num;
+			$("#dartContainer").append(dart);
 			dart.className = "dart";
-			dart.id = "n" + num;
+			dart.id = "n" + dartId;
 			dart.innerHTML = "x";
-			$("#n" + num).css("position", "absolute");
+			$("#n" + dartId).css("position", "absolute");
+			$("#n" + dartId).css("left", (x - 13) / w * 100 + "%");
+			$("#n" + dartId).css("top", (y - 40) / h * 100 + "%");
+			$("#n" + dartId).css("color", colors[Math.floor(num / 5)]);
+			if(!isReset) createNewRow(dartId);
+			darts[dartId] = {x: px, y: py, dart: dart};
+			addDataInTable(dartId);
+			statistics();
+			if(isReset) num = tempNum;
+			else num++;
+			isReset = false;
 		}
-		else {
-			dart = darts[num].dart;
+	});
+	$("#preDay").click(function() {
+		if(day > 0 && !isReset) {
+			day--;
+			settingTable();
 		}
-		if(darts[num] == null) createNewRow();
-		$("#n" + num).css("left", (x - 13) / w * 100 + "%");
-		$("#n" + num).css("top", (y - 40) / h * 100 + "%");
-		darts[num] = {x: px, y: py, dart: dart};
-		addDataInTable();
-		console.log(darts);
-		if(num == 4) num = 0;
-		else num++;
+	});
+	$("#nextDay").click(function() {
+		if(day < 14 && !isReset) {
+			day++;
+			settingTable();
+		}
+	});
+	$("#download").click(function() {
+		let isFilled = true;
+		for(let i = day * 25; i < (day + 1) * 25; i++) {
+			if(darts[i] == null) {
+				isFilled = false;
+				break;
+			}
+		}
+		if(isFilled) generateFile();
 	});
 });
 
-function createNewRow() {
-	$("#title tbody").append('<tr class = "Num' + num + '"></tr>');
-	$(".Num" + num).append('<th scope = "row">' + (num + 1) + '</th>');
-	$(".Num" + num).append('<td class = "score"></td>');
-	$(".Num" + num).append('<td class = "x"></td>');
-	$(".Num" + num).append('<td class = "y"></td>');
-	$(".Num" + num).append('<td class = "r"></td>');
-	$(".Num" + num).append('<td class = "degree"></td>');
-	$(".Num" + num).append('<td><div class = "reset">Reset</div></td>');
-	resetEvent(num);
+function settingTable() {
+	num = 0;
+	$("#dartContainer").empty();
+	$("#title tbody").empty();
+	$("#dayDisplay").text(dayLebel[day]);
+	for(let i = day * 25; i < (day + 1) * 25; i++) {
+		if(darts[i] == null) break;
+		$("#dartContainer").append(darts[i].dart)
+		createNewRow(i);
+		addDataInTable(i);
+		num++;
+	}
+	statistics();
 }
 
-function addDataInTable() {
-	let x = darts[num].x, y = -darts[num].y;
-	let r = Math.pow(Math.pow(x, 2) + Math.pow(y, 2), 0.5);
-	let s = 0;
-	for(let i = 0; i < ss.length; i++) {
-		if(Math.abs(r) <= ss[i]) s++;
-		else break;
-	}
-	let d = Math.atan2(y, x) / Math.PI * 180;
-	if(d < 0) d += 360;
-	$(".Num" + num + " .score").text(s);
-	$(".Num" + num + " .x").text((x * 100).toFixed(2) + "%");
-	$(".Num" + num + " .y").text((y * 100).toFixed(2) + "%");
-	$(".Num" + num + " .r").text((r * 100).toFixed(2) + "%");
-	$(".Num" + num + " .degree").text(d.toFixed(2));
+function createNewRow(i) {
+	$("#title tbody").append('<tr id = "Num' + i + '"></tr>');
+	$("#Num" + i).append('<th scope="row">' + (i + 1) + '</th>');
+	$("#Num" + i).append('<td class = "score"></td>');
+	$("#Num" + i).append('<td class = "x"></td>');
+	$("#Num" + i).append('<td class = "y"></td>');
+	$("#Num" + i).append('<td class = "r"></td>');
+	$("#Num" + i).append('<td class = "degree"></td>');
+	$("#Num" + i).append('<td><div class = "reset button">Reset</div></td>');
+	resetEvent(i);
+}
+
+function addDataInTable(i) {
+	let result = calculate(darts[i].x, -darts[i].y);
+	$("#Num" + i + " .score").text(result.s);
+	$("#Num" + i + " .x").text(result.x + "%");
+	$("#Num" + i + " .y").text(result.y + "%");
+	$("#Num" + i + " .r").text(result.r + "%");
+	$("#Num" + i + " .degree").text(result.d);
 }
 
 function resetEvent(i) {
-	$(".Num" + num + " .reset").mousedown(function() {
+	$("#Num" + i + " .reset").mousedown(function() {
 		$(this).css("box-shadow", "0 0 10px #E12");
 	});
-	$(".Num" + num + " .reset").mouseup(function() {
-		$(this).css("box-shadow", "");
-		if(num != i) {
-			num = i;
-			darts[num].dart = null;
-			$("#n" + num).remove();
-			$(".Num" + num + " .score").text("");
-			$(".Num" + num + " .x").text("");
-			$(".Num" + num + " .y").text("");
-			$(".Num" + num + " .r").text("");
-			$(".Num" + num + " .degree").text("");
-			console.log(i);
+	$("#Num" + i + " .reset").mouseup(function() {
+		if(!isReset) {
+			isReset = true;
+			tempNum = num;
+			num = i % 25;
+			$(this).css("box-shadow", "");
+			darts[i] = null;
+			$("#n" + i).remove();
+			$("#Num" + i + " .score").text("");
+			$("#Num" + i + " .x").text("");
+			$("#Num" + i + " .y").text("");
+			$("#Num" + i + " .r").text("");
+			$("#Num" + i + " .degree").text("");
 		}
 	});
-	$(".Num" + num + " .reset").mouseleave(function() {
+	$("#Num" + i + " .reset").mouseleave(function() {
 		$(this).css("box-shadow", "");
 	});
 }
